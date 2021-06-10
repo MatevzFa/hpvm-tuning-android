@@ -1,3 +1,6 @@
 env.sh
+android_profiling.*
+final_accuracy
+profile_info.txt
 
 __pycache__

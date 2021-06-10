@@ -19,10 +19,16 @@ def env(key):
     if len(val) == 0:
         raise RuntimeError(f"env variable {key} must be given")
     return val
-
-
+    
+hpvm_root = Path(env("HPVM_ROOT"))
+dnn_benchmarks_root = hpvm_root / "hpvm/test/dnn_benchmarks"
 model_params_base = Path(env("MODEL_PARAMS_DIR"))
 global_knobs_path = Path(env("GLOBAL_KNOBS_PATH"))
+
+
+
+
+
 
 
 def compile_binary(
@@ -99,8 +105,8 @@ def run_alexnet_cifar10():
         model_id="alexnet_cifar10",
         model=dnn.AlexNet(),
         dataset_shape=(5000, 3, 32, 32),
-        config_file=Path(
-            "hpvm-c/benchmarks/alexnet_cifar10/data/tuner_confs.txt"),
+        config_file=dnn_benchmarks_root/
+            "hpvm-c/benchmarks/alexnet_cifar10/data/tuner_confs.txt",
         output_dir=Path(f"android_profiling.alexnet_cifar10"),
     )
 
@@ -110,8 +116,8 @@ def run_alexnet2_cifar10():
         model_id="alexnet2_cifar10",
         model=dnn.AlexNet2(),
         dataset_shape=(5000, 3, 32, 32),
-        config_file=Path(
-            "hpvm-c/benchmarks/alexnet2_cifar10/data/tuner_confs.txt"),
+        config_file=dnn_benchmarks_root/
+            "hpvm-c/benchmarks/alexnet2_cifar10/data/tuner_confs.txt",
         output_dir=Path(f"android_profiling.alexnet2_cifar10"),
     )
 
@@ -121,8 +127,8 @@ def run_vgg16_cifar10():
         model_id="vgg16_cifar10",
         model=dnn.VGG16Cifar10(),
         dataset_shape=(5000, 3, 32, 32),
-        config_file=Path(
-            "hpvm-c/benchmarks/vgg16_cifar10/data/tuner_confs.txt"),
+        config_file=dnn_benchmarks_root/
+            "hpvm-c/benchmarks/vgg16_cifar10/data/tuner_confs.txt",
         output_dir=Path(f"android_profiling.vgg16_cifar10"),
     )
 
@@ -132,8 +138,8 @@ def run_mobilenet_cifar10():
         model_id="mobilenet_cifar10",
         model=dnn.MobileNet(),
         dataset_shape=(5000, 3, 32, 32),
-        config_file=Path(
-            "hpvm-c/benchmarks/mobilenet_cifar10/data/tuner_confs.txt"),
+        config_file=dnn_benchmarks_root/
+            "hpvm-c/benchmarks/mobilenet_cifar10/data/tuner_confs.txt",
         output_dir=Path(f"android_profiling.mobilenet_cifar10"),
     )
 
