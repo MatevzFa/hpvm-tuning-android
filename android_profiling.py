@@ -1,17 +1,20 @@
 import os
+import sys
+
+sys.path.append(os.path.abspath(
+    os.getenv("HPVM_ROOT") + "/hpvm/test/dnn_benchmarks"))  # noqa
+
 import shutil
 import subprocess
-import sys
 from pathlib import Path
+from typing import Optional
 
 import torch
 from hpvm_profiler_android import plot_hpvm_configs, profile_config_file
 from predtuner import config_pylogger
+from pytorch import dnn  # Defined at `hpvm/test/dnn_benchmarks/pytorch/dnn`
 from torch2hpvm import BinDataset, ModelExporter
 from torch.nn import Module
-
-sys.path.append(os.path.abspath(os.getenv("HPVM_ROOT") + "/hpvm/test/dnn_benchmarks"))
-from pytorch import dnn  # Defined at `hpvm/test/dnn_benchmarks/pytorch/dnn`
 
 
 def env(key):
@@ -19,16 +22,12 @@ def env(key):
     if len(val) == 0:
         raise RuntimeError(f"env variable {key} must be given")
     return val
-    
+
+
 hpvm_root = Path(env("HPVM_ROOT"))
 dnn_benchmarks_root = hpvm_root / "hpvm/test/dnn_benchmarks"
 model_params_base = Path(env("MODEL_PARAMS_DIR"))
 global_knobs_path = Path(env("GLOBAL_KNOBS_PATH"))
-
-
-
-
-
 
 
 def compile_binary(
@@ -85,19 +84,26 @@ def run(
     dataset_shape: tuple,
     config_file: Path,
     output_dir: Path,
+    configs_parent: Optional[Path] = None,
     batch_size=25,
     max_inputs=100,
     quiet: bool = False,
 ):
-    out_config_file = output_dir / "hpvm_confs_profiled.txt"
+    configs_parent = configs_parent or output_dir
+
+    out_config_file = configs_parent / \
+        (config_file.stem + '.android-profiled' + config_file.suffix)
+    out_plot_path = configs_parent / (out_config_file.stem + '.png')
+
     binary_path = compile_binary(
         model_id, model, dataset_shape, batch_size, max_inputs, config_file, output_dir)
     install_via_adb(
         binary_path, config_file, output_dir)
+
     profile_config_file(
         binary_path, config_file, out_config_file, quiet=quiet)
     plot_hpvm_configs(
-        out_config_file, output_dir / "configs_profiled.png")
+        out_config_file, out_plot_path)
 
 
 def run_alexnet_cifar10():
@@ -105,8 +111,8 @@ def run_alexnet_cifar10():
         model_id="alexnet_cifar10",
         model=dnn.AlexNet(),
         dataset_shape=(5000, 3, 32, 32),
-        config_file=dnn_benchmarks_root/
-            "hpvm-c/benchmarks/alexnet_cifar10/data/tuner_confs.txt",
+        config_file=dnn_benchmarks_root /
+        "hpvm-c/benchmarks/alexnet_cifar10/data/tuner_confs.txt",
         output_dir=Path(f"android_profiling.alexnet_cifar10"),
     )
 
@@ -116,8 +122,8 @@ def run_alexnet2_cifar10():
         model_id="alexnet2_cifar10",
         model=dnn.AlexNet2(),
         dataset_shape=(5000, 3, 32, 32),
-        config_file=dnn_benchmarks_root/
-            "hpvm-c/benchmarks/alexnet2_cifar10/data/tuner_confs.txt",
+        config_file=dnn_benchmarks_root /
+        "hpvm-c/benchmarks/alexnet2_cifar10/data/tuner_confs.txt",
         output_dir=Path(f"android_profiling.alexnet2_cifar10"),
     )
 
@@ -127,8 +133,8 @@ def run_vgg16_cifar10():
         model_id="vgg16_cifar10",
         model=dnn.VGG16Cifar10(),
         dataset_shape=(5000, 3, 32, 32),
-        config_file=dnn_benchmarks_root/
-            "hpvm-c/benchmarks/vgg16_cifar10/data/tuner_confs.txt",
+        config_file=dnn_benchmarks_root /
+        "hpvm-c/benchmarks/vgg16_cifar10/data/tuner_confs.txt",
         output_dir=Path(f"android_profiling.vgg16_cifar10"),
     )
 
@@ -138,10 +144,26 @@ def run_mobilenet_cifar10():
         model_id="mobilenet_cifar10",
         model=dnn.MobileNet(),
         dataset_shape=(5000, 3, 32, 32),
-        config_file=dnn_benchmarks_root/
-            "hpvm-c/benchmarks/mobilenet_cifar10/data/tuner_confs.txt",
+        config_file=dnn_benchmarks_root /
+        "hpvm-c/benchmarks/mobilenet_cifar10/data/tuner_confs.txt",
         output_dir=Path(f"android_profiling.mobilenet_cifar10"),
     )
+
+
+def compile_mobilenet_uci_har():
+
+    conf_file = "hpvm-tuning-configurations/50000_5.0_10.0_30/hpvm_confs.txt"
+    output_dir = "android_profiling.mobilenet_uci-har"
+
+    binary = compile_binary(
+        model_id="mobilenet_uci-har",
+        model=dnn.MobileNet6(),
+        dataset_shape=(5000, 3, 32, 32),
+        batch_size=50, max_inputs=250,
+        conf_file=Path(conf_file),
+        output_dir=Path(output_dir),
+    )
+    install_via_adb(binary, conf_file, Path(output_dir))
 
 
 if __name__ == '__main__':
