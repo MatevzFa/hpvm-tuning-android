@@ -12,17 +12,18 @@ def main():
     parser.add_argument("config_file", type=str,
                         help="Path to the HPVM configuration file for profiling")
     parser.add_argument("--out-dir", "-d", type=str)
+    parser.add_argument("--suffix", "-s", type=str, required=False)
 
     args = parser.parse_args()
 
     binary = Path(args.binary)
     config_file = Path(args.config_file)
     parent = Path(args.out_dir or config_file.parent)
+    suffix = f".{args.suffix}" if args.suffix is not None else ""
 
     out_config_file = parent / \
-        (config_file.stem + '.android-profiled' + config_file.suffix)
+        (config_file.stem + ".android-profiled" + suffix + config_file.suffix)
 
-    plot_path = parent / (config_file.stem + '.png')
     out_plot_path = parent / (out_config_file.stem + '.png')
 
     profile_config_file(binary, config_file, out_config_file)
