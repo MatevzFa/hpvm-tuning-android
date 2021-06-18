@@ -3,4 +3,10 @@ android_profiling.*
 final_accuracy
 profile_info.txt
 
+tuner_results/
+
+conf*.txt
+conf*.pdf
+conf*.png
+
 __pycache__
