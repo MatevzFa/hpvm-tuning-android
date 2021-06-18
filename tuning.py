@@ -76,9 +76,9 @@ class TuningArgs:
     batch_size: int
     output_dir: str
     model_storage_dir: str
-    take_best_n: int = field(default=50)
-    cost_model: str = field(default="cost_linear")
-    qos_model: str = field(default="qos_p1")
+    take_best_n: int
+    cost_model: str
+    qos_model: str
 
     out_config: Optional[str] = field(default=None)
 
@@ -100,6 +100,10 @@ def tuning_args() -> TuningArgs:
         "-C", "--out-config", type=str,
         help="Output configuration name. Used in generating configuration files and plot files"
     )
+
+    parser.add_argument("--take-best-n", type=int, default=50)
+    parser.add_argument("--cost-model", type=str, default="cost_linear")
+    parser.add_argument("--qos-model", type=str, default="qos_p1")
 
     args = parser.parse_args()
     return TuningArgs(**vars(args))
