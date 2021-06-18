@@ -75,7 +75,7 @@ def main():
 
     fig = tuner.plot_configs(show_qos_loss=True, connect_best_points=True)
     fig.savefig(out_plot_file, bbox_inches="tight")
-    app.dump_hpvm_configs(tuner.best_configs, out_config_file_all)
+    app.dump_hpvm_configs(tuner.best_configs_prefilter, out_config_file_all)
     app.dump_hpvm_configs(tuner.best_configs, out_config_file_best)
 
 
