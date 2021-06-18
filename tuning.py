@@ -65,7 +65,7 @@ def compile_tuner_binary(
     return exporter, tuner_binary
 
 
-@ dataclass
+@dataclass
 class TuningArgs:
     model_id: str
 
@@ -105,7 +105,7 @@ def tuning_args() -> TuningArgs:
     return TuningArgs(**vars(args))
 
 
-@ dataclass
+@dataclass
 class ModelInfo:
     data_dir: Path
     data_shape: Tuple[int, int, int, int]
@@ -117,17 +117,23 @@ _model_params_base = Path(os.getenv("MODEL_PARAMS_DIR"))
 
 _model_infos = {
     'mobilenet_cifar10': ModelInfo(
-        data_dir=_model_params_base/"alexnet2_cifar10",
+        data_dir=_model_params_base / "mobilenet_cifar10",
         data_shape=(5000, 3, 32, 32),
         model_factory=dnn.MobileNet,
-        checkpoint=_model_params_base/"pytorch/alexnet2_cifar10.pth.tar"
+        checkpoint=_model_params_base / "pytorch/mobilenet_cifar10.pth.tar"
     ),
     'resnet18_cifar10': ModelInfo(
-        data_dir=_model_params_base/"resnet18_cifar10",
+        data_dir=_model_params_base / "resnet18_cifar10",
         data_shape=(5000, 3, 32, 32),
         model_factory=dnn.ResNet18,
-        checkpoint=_model_params_base/"pytorch/resnet18_cifar10.pth.tar"
-    )
+        checkpoint=_model_params_base / "pytorch/resnet18_cifar10.pth.tar"
+    ),
+    'alexnet2_cifar10': ModelInfo(
+        data_dir=_model_params_base / "alexnet2_cifar10",
+        data_shape=(5000, 3, 32, 32),
+        model_factory=dnn.AlexNet2,
+        checkpoint=_model_params_base / "pytorch/alexnet2_cifar10.pth.tar"
+    ),
 }
 
 

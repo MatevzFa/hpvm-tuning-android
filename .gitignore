@@ -10,3 +10,5 @@ conf*.pdf
 conf*.png
 
 __pycache__
+
+*.log
