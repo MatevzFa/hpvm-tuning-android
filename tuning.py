@@ -138,6 +138,12 @@ _model_infos = {
         model_factory=dnn.AlexNet2,
         checkpoint=_model_params_base / "pytorch/alexnet2_cifar10.pth.tar"
     ),
+    'vgg16_cifar10': ModelInfo(
+        data_dir=_model_params_base / "vgg16_cifar10",
+        data_shape=(5000, 3, 32, 32),
+        model_factory=dnn.VGG16Cifar10,
+        checkpoint=_model_params_base / "pytorch/vgg16_cifar10.pth.tar"
+    ),
 }
 
 
