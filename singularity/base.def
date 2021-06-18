@@ -1,0 +1,34 @@
+Bootstrap: docker
+From: nvidia/cuda:10.2-cudnn7-devel-ubuntu18.04
+
+%setup
+
+%environment
+    . /venv/bin/activate
+    
+    export CUDA_INCLUDE_PATH=/usr/local/cuda-10.2/include
+    export CUDA_LIB_PATH=/usr/local/cuda-10.2/lib64/
+    export CUDA_BIN_PATH=/usr/local/cuda-10.2
+    export CUDA_INCLUDE_PATH=$CUDA_INCLUDE_PATH
+    export CUDNN_PATH=$CUDA_LIB_PATH
+    export LIBRARY_PATH=$CUDA_LIB_PATH:$LIBRARY_PATH
+    export LD_LIBRARY_PATH=$CUDA_LIB_PATH:$LD_LIBRARY_PATH
+
+%post
+
+    apt update
+    apt install -y build-essential python3 python3-pip python3-venv ninja-build curl git 
+
+    python3 -m venv /venv
+    . /venv/bin/activate
+
+    # Upgrade pip
+    pip install --upgrade pip
+
+    # Install cmake
+    curl -L https://github.com/Kitware/CMake/releases/download/v3.20.0/cmake-3.20.0-linux-x86_64.sh -o cmake.sh
+    bash ./cmake.sh --skip-license --prefix=/usr
+    rm cmake.sh
+
+%test
+    cmake --version

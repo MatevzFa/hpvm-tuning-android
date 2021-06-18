@@ -1,0 +1,25 @@
+Bootstrap: localimage
+From: base.sif
+
+%setup
+
+%environment
+    . /venv/bin/activate
+
+%post
+    export CUDA_INCLUDE_PATH=/usr/local/cuda-10.2/include
+    export CUDA_LIB_PATH=/usr/local/cuda-10.2/lib64/
+    export CUDA_BIN_PATH=/usr/local/cuda-10.2
+    export CUDA_INCLUDE_PATH=$CUDA_INCLUDE_PATH
+    export CUDNN_PATH=$CUDA_LIB_PATH
+    export LIBRARY_PATH=$CUDA_LIB_PATH:$LIBRARY_PATH
+    export LD_LIBRARY_PATH=$CUDA_LIB_PATH:$LD_LIBRARY_PATH
+
+    # Build HPVM
+    git clone --recursive --shallow-submodules --depth 1 -b main https://gitlab.engr.illinois.edu/llvm/hpvm-release.git /app
+    cd /app/hpvm
+    ./install.sh -b build -j8 -t "X86" --ninja --no-params DCMAKE_BUILD_TYPE=MinSizeRel
+
+%test
+    ls /app
+    hpvm-clang -h

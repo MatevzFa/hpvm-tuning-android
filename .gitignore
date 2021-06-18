@@ -12,3 +12,5 @@ conf*.png
 __pycache__
 
 *.log
+
+*.sif
