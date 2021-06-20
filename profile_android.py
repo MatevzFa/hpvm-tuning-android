@@ -82,7 +82,7 @@ def main():
     install_via_adb(target_binary, conf_file, Path(args.output_dir))
 
     out_config_file = parent / (conf_file.stem + '.android-profiled' + conf_file.suffix)
-    out_plot_path = parent / (out_config_file.stem + '.png')
+    out_plot_path = parent / (out_config_file.stem + '.pdf')
 
     profile_config_file(target_binary, conf_file, out_config_file)
     plot_hpvm_configs(out_config_file, out_plot_path)
