@@ -30,6 +30,7 @@ def prepare_model(model: Module, checkpoint: Path) -> Module:
 
 def compile_target_binary(
     *,
+    model_id: str,
     model: Module,
     tuneset: DatasetTy, testset: DatasetTy,
     output_dir: Path, conf_file: Path,
@@ -37,7 +38,7 @@ def compile_target_binary(
 ) -> Tuple[ModelExporter, Path]:
 
     build_dir = output_dir / "build"
-    target_binary = build_dir / "alexnet2"
+    target_binary = build_dir / model_id
 
     exporter = ModelExporter(model, tuneset, testset,
                              output_dir, config_file=conf_file)
