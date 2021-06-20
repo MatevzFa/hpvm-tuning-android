@@ -1,11 +1,11 @@
 import argparse
+import subprocess
+from dataclasses import dataclass
 from pathlib import Path
 
 from hpvm_profiler_android import plot_hpvm_configs, profile_config_file
 
 from tuning import *
-
-from dataclasses import dataclass
 
 
 @dataclass
@@ -38,6 +38,23 @@ def profiling_args() -> ProfilingArgs:
     return ProfilingArgs(**vars(args))
 
 
+def install_via_adb(
+    binary_path_host: Path,
+    conf_file: Path,
+    output_dir: Path,
+):
+    w_tmpdir = output_dir / "tmp.weights"
+    subprocess.run(["adb", "push", str(binary_path_host), "/data/local/tmp"])
+    subprocess.run(["adb", "push", str(conf_file), "/data/local/tmp"])
+    subprocess.run(["mkdir", "-p", str(w_tmpdir)])
+    subprocess.run(["cp", "-rL", str(output_dir / "weights"), str(w_tmpdir)])
+    subprocess.run(
+        ["adb", "push", str(w_tmpdir / "weights"), "/data/local/tmp"])
+    subprocess.run(
+        ["adb", "push", os.getenv("GLOBAL_KNOBS_PATH"), "/data/local/tmp"])
+    subprocess.run(["rm", "-rf", str(w_tmpdir)])
+
+
 def main():
     args = profiling_args()
 
@@ -50,16 +67,21 @@ def main():
     parent = Path(".")
     conf_file = Path(args.configuration)
 
-    target_binary, target_exporter = compile_target_binary(
+    model = prepare_model(info.model_factory(), info.checkpoint)
+
+    _, target_binary = compile_target_binary(
         model_id=args.model_id,
-        model=info.model_factory(),
+        model=model,
         tuneset=tuneset, testset=testset,
         output_dir=Path(args.output_dir),
-        conf_file=conf_file,
-        batch_size=args.batch_size
+        conf_file=Path(conf_file.name),
+        batch_size=args.batch_size,
+        max_inputs=args.max_inputs,
     )
 
-    out_config_file = (conf_file.stem + '.android-profiled' + conf_file.suffix)
+    install_via_adb(target_binary, conf_file, Path(args.output_dir))
+
+    out_config_file = parent / (conf_file.stem + '.android-profiled' + conf_file.suffix)
     out_plot_path = parent / (out_config_file.stem + '.png')
 
     profile_config_file(target_binary, conf_file, out_config_file)

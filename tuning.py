@@ -34,7 +34,7 @@ def compile_target_binary(
     model: Module,
     tuneset: DatasetTy, testset: DatasetTy,
     output_dir: Path, conf_file: Path,
-    batch_size: int,
+    batch_size: int, max_inputs: int,
 ) -> Tuple[ModelExporter, Path]:
 
     build_dir = output_dir / "build"
@@ -42,7 +42,7 @@ def compile_target_binary(
 
     exporter = ModelExporter(model, tuneset, testset,
                              output_dir, config_file=conf_file)
-    exporter.generate(batch_size=batch_size).compile(
+    exporter.generate(batch_size=batch_size, max_inputs=max_inputs).compile(
         target_binary, build_dir)
 
     return exporter, target_binary
