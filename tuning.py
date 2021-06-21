@@ -14,6 +14,8 @@ from torch2hpvm import BinDataset, ModelExporter
 from torch2hpvm.compile import DatasetTy
 from torch.nn import Module
 
+import nn_models
+
 
 def load_datasets(data_dir: Path, data_shape: Tuple[int, int, int, int]) -> Tuple[DatasetTy, DatasetTy]:
     tuneset = BinDataset(data_dir / "tune_input.bin",
@@ -126,6 +128,12 @@ _model_infos = {
         data_shape=(5000, 3, 32, 32),
         model_factory=dnn.MobileNet,
         checkpoint=_model_params_base / "pytorch/mobilenet_cifar10.pth.tar"
+    ),
+    'mobilenet_uci-har': ModelInfo(
+        data_dir=_model_params_base / "mobilenet_uci-har",
+        data_shape=(5000, 3, 32, 32),
+        model_factory=nn_models.MobileNetUciHar,
+        checkpoint=_model_params_base / "pytorch/mobilenet_uci-har.pth.tar"
     ),
     'resnet18_cifar10': ModelInfo(
         data_dir=_model_params_base / "resnet18_cifar10",
