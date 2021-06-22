@@ -131,7 +131,7 @@ _model_infos = {
     ),
     'mobilenet_uci-har': ModelInfo(
         data_dir=_model_params_base / "mobilenet_uci-har",
-        data_shape=(5000, 3, 32, 32),
+        data_shape=(1450, 3, 32, 32),
         model_factory=nn_models.MobileNetUciHar,
         checkpoint=_model_params_base / "pytorch/mobilenet_uci-har.pth.tar"
     ),
@@ -152,6 +152,12 @@ _model_infos = {
         data_shape=(5000, 3, 32, 32),
         model_factory=dnn.VGG16Cifar10,
         checkpoint=_model_params_base / "pytorch/vgg16_cifar10.pth.tar"
+    ),
+    'resnet50_uci-har': ModelInfo(
+        data_dir=_model_params_base / "mobilenet_uci-har",
+        data_shape=(1450, 3, 32, 32),
+        model_factory=nn_models.ResNet50UciHar,
+        checkpoint=_model_params_base / "pytorch/resnet50_uci-har.pth.tar"
     ),
 }
 

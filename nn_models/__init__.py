@@ -5,6 +5,12 @@ sys.path.append("/app/hpvm/test/dnn_benchmarks") # noqa
 from pytorch.dnn.mobilenet import *
 from pytorch.dnn.mobilenet import _make_seq
 
+from torch.nn import Module
+
+"""
+MobileNet
+"""
+
 
 class MobileNetUciHar(Classifier):
     def __init__(self):
@@ -28,4 +34,57 @@ class MobileNetUciHar(Classifier):
             AvgPool2d(2)
         )
         linears = Sequential(Linear(1024, 6))
+        super().__init__(convs, linears)
+
+
+"""
+ResNet50
+"""
+
+class Bottleneck(Module):
+    expansion = 4
+
+    def __init__(self, in_planes, planes, stride=1):
+        super(Bottleneck, self).__init__()
+        self.mainline = Sequential(
+            *make_conv_pool_activ(in_planes, planes, 1, stride=stride),
+            BatchNorm2d(planes, eps=0.001),
+            ReLU(),
+            *make_conv_pool_activ(planes, planes, 3, padding=1),
+            BatchNorm2d(planes, eps=0.001),
+            ReLU(),
+            *make_conv_pool_activ(planes, self.expansion * planes, 1),
+            BatchNorm2d(self.expansion * planes, eps=0.001)
+        )
+        self.relu1 = ReLU()
+        if stride != 1 or in_planes != self.expansion * planes:
+            self.shortcut = Sequential(
+                *make_conv_pool_activ(
+                    in_planes, self.expansion * planes, 1, stride=stride
+                ),
+                BatchNorm2d(self.expansion * planes, eps=0.001)
+            )
+        else:
+            self.shortcut = Sequential()
+
+    def forward(self, input_):
+        return self.relu1(self.mainline(input_) + self.shortcut(input_))
+
+
+class ResNet50UciHar(Classifier):
+    def __init__(self):
+        convs = Sequential(
+            *make_conv_pool_activ(
+                3, 64, 3, ReLU, pool_size=2, pool_stride=2, padding=1, stride=2
+            ),
+            BatchNorm2d(64, eps=0.001),
+            Bottleneck(64, 64),
+            Bottleneck(256, 64),
+            Bottleneck(256, 64),
+            Bottleneck(256, 128, stride=2),
+            Bottleneck(512, 128),
+            Bottleneck(512, 128),
+            Bottleneck(512, 256, stride=2),
+        )
+        linears = Sequential(Linear(4096, 6))
         super().__init__(convs, linears)

@@ -17,6 +17,8 @@ def config_name(args: TuningArgs):
 
 def main():
     args = tuning_args()
+    
+    print(args)
 
     tuning_info = get_model_info(args.model_id)
 
@@ -63,8 +65,8 @@ def main():
         # Thresholds are relative to baseline -- baseline_acc - 3.0
         is_threshold_relative=True,
         take_best_n=args.take_best_n,  # Take the best 50 configurations,
-        cost_model=args.cost_model,  # Use linear performance predictor
-        qos_model=args.qos_model,  # Use P1 QoS predictor
+        cost_model=args.cost_model or None,  # Use linear performance predictor
+        qos_model=args.qos_model or None,  # Use P1 QoS predictor
     )
 
     conf_name = args.out_config or config_name(args)
