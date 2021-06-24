@@ -18,6 +18,7 @@ class ProfilingArgs:
 
     max_inputs: Optional[int] = field(default=None)
     out_config: Optional[str] = field(default=None)
+    conf_limit: Optional[int] = field(default=None)
 
 
 def profiling_args() -> ProfilingArgs:
@@ -33,6 +34,8 @@ def profiling_args() -> ProfilingArgs:
     parser.add_argument("-M", "--max-inputs", type=int, default=None)
     parser.add_argument("-C", "--out-config", type=str,
                         help="Output configuration name. Used in generating configuration files and plot files")
+
+    parser.add_argument("--conf-limit", type=int)
 
     args = parser.parse_args()
     return ProfilingArgs(**vars(args))
@@ -84,7 +87,7 @@ def main():
     out_config_file = parent / (conf_file.stem + '.android-profiled' + conf_file.suffix)
     out_plot_path = parent / (out_config_file.stem + '.pdf')
 
-    profile_config_file(target_binary, conf_file, out_config_file)
+    profile_config_file(target_binary, conf_file, out_config_file, conf_limit=args.conf_limit)
     plot_hpvm_configs(out_config_file, out_plot_path)
 
 
