@@ -18,15 +18,16 @@ def plot_weights(model: nn.Module, conv_id: int) -> Figure:
 
     conv = convs[conv_id]
 
-    fig, axes = plt.subplots(5, 5)
+    fig, axes = plt.subplots(4, 4)
 
     filters = np.array(conv.weight.data)
+    filters = (filters - np.min(filters))/np.ptp(filters)
+
     for ax, filter in zip(fig.axes, filters[:len(fig.axes)]):
         c, h, w = 0, 1, 2
 
         f = np.transpose(filter, axes=[h, w, c])
         # f = np.sum(f, axis=2)
-        f = (f - np.min(f))/np.ptp(f)
 
         ax.imshow(f)
         ax.set_frame_on(False)
@@ -43,8 +44,10 @@ def plot_weights(model: nn.Module, conv_id: int) -> Figure:
         ax.set_ylabel(row, rotation=0, size='large', labelpad=10, y=.25)
 
     print(filters.shape)
-    print(f"var(w) = {np.var(filters, axis=3).mean()}")
-    print(f"var(h) = {np.var(filters, axis=2).mean()}")
+    var = np.var(filters, axis=(1,2))
+
+    print(var.shape)
+    print(f"var min={np.min(var):.3f} avg={np.mean(var):.3f} median={np.median(var):.3f} max={np.max(var):.3f}")
 
     return fig
 
