@@ -18,6 +18,7 @@ class ProfilingArgs:
     plot_only: bool
     verbose: bool
 
+    suffix: Optional[str] = field(default=None)
     output_dir: Optional[str] = field(default=None)
     max_inputs: Optional[int] = field(default=None)
     out_config: Optional[str] = field(default=None)
@@ -38,6 +39,7 @@ def profiling_args() -> ProfilingArgs:
     parser.add_argument("-M", "--max-inputs", type=int, default=None)
     parser.add_argument("-C", "--out-config", type=str,
                         help="Output configuration name. Used in generating configuration files and plot files")
+    parser.add_argument("-s", "--suffix", type=str, default=None)
 
     parser.add_argument("--conf-limit", type=int)
     parser.add_argument("-v", "--verbose", action='store_true', help="Verbose mode")
@@ -71,7 +73,8 @@ def main():
     parent = Path(".")
     conf_file = Path(args.configuration)
 
-    out_config_file = parent / (conf_file.stem + '.android-profiled' + conf_file.suffix)
+    suffix = f".{args.suffix}" if args.suffix is not None else ""
+    out_config_file = parent / (conf_file.stem + '.android-profiled' + suffix + conf_file.suffix)
     out_plot_path = parent / (out_config_file.stem + '.pdf')
     out_plot_path_confidence = parent / (out_config_file.stem + '.confidence.pdf')
 
