@@ -16,6 +16,7 @@ class ProfilingArgs:
     batch_size: int
 
     plot_only: bool
+    verbose: bool
 
     output_dir: Optional[str] = field(default=None)
     max_inputs: Optional[int] = field(default=None)
@@ -39,6 +40,7 @@ def profiling_args() -> ProfilingArgs:
                         help="Output configuration name. Used in generating configuration files and plot files")
 
     parser.add_argument("--conf-limit", type=int)
+    parser.add_argument("-v", "--verbose", action='store_true', help="Verbose mode")
 
     args = parser.parse_args()
     return ProfilingArgs(**vars(args))
@@ -92,7 +94,11 @@ def main():
         )
 
         install_via_adb(target_binary, conf_file, Path(args.output_dir))
-        profile_config_file(target_binary, conf_file, out_config_file, conf_limit=args.conf_limit)
+        profile_config_file(
+            target_binary, conf_file, out_config_file,
+            conf_limit=args.conf_limit,
+            quiet=not args.verbose
+        )
 
     plot_hpvm_configs(out_config_file, out_plot_path)
     plot_hpvm_configs_confidence(out_config_file, out_plot_path_confidence)
