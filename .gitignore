@@ -17,3 +17,6 @@ __pycache__
 *.sif
 
 weights*.pdf
+
+*.xls
+*.xlsx
