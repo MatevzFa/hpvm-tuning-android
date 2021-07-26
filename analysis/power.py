@@ -90,8 +90,10 @@ def main():
     marker = itertools.cycle(('^', 'o', 's', 'x', '.'))
 
     plt.figure(figsize=(5, 3))
+    plt.ylim(0.55, 1.15)
 
     plt.axhline(1.0, color='gray', linestyle='--', linewidth=.5)
+    plt.axvline(3.0, color='gray', linestyle='--', linewidth=.5)
 
     for nn, config_path in nns.items():
         plt.ylabel("Energy consumption")
