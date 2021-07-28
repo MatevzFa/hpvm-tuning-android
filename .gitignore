@@ -3,6 +3,8 @@ android_profiling.*
 final_accuracy
 final_confidence
 profile_info.txt
+model_log
+final_correctness_prediction
 
 tuner_results/
 

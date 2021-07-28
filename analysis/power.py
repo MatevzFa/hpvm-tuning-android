@@ -1,18 +1,18 @@
 import argparse
 import itertools
+import json
 from dataclasses import dataclass
 
 import matplotlib.pyplot as plt
 import numpy as np
-from numpy.core.fromnumeric import mean
 import pandas as pd
 from hpvm_profiler_android import read_hpvm_configs
 from matplotlib import rc
-import json
+from numpy.core.fromnumeric import mean
 
-plt.rcParams['font.family'] = 'serif'
-plt.rcParams['font.serif'] = 'CMU Serif'
-rc('text', **{'usetex': True})
+from analysis import setup_tex
+
+setup_tex()
 
 
 @dataclass
