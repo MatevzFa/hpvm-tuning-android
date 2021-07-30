@@ -9,7 +9,7 @@ from matplotlib import rc
 from pandas.core.arrays.sparse import dtype
 from pandas.core.indexes.multi import MultiIndex
 from pandas.core.indexes.range import RangeIndex
-from sklearn import tree, model_selection, metrics
+from sklearn import tree, linear_model, model_selection, metrics
 
 from analysis import esc, setup_tex
 
@@ -110,6 +110,12 @@ def model_tree():
         features = pd.DataFrame({
             'y': y,
             'y_pred': y_pred,
+            'y_pred_0': (y_pred == 0),
+            'y_pred_1': (y_pred == 1),
+            'y_pred_2': (y_pred == 2),
+            'y_pred_3': (y_pred == 3),
+            'y_pred_4': (y_pred == 4),
+            'y_pred_5': (y_pred == 5),
             'confidence': confidence[np.arange(len(y_pred)), y_pred],
             'confidence_var': confidence.var(axis=1),
             'correct': (y == y_pred).astype(int),
@@ -118,21 +124,23 @@ def model_tree():
         acc = features["correct"].sum() / len(features["correct"])
 
         train, test = model_selection.train_test_split(features, test_size=.33, shuffle=True, random_state=123)
-        feats = ["y_pred", "confidence", "confidence_var"]
+        feats = ["y_pred_0", "y_pred_1", "y_pred_2", "y_pred_3", "y_pred_4", "y_pred_5", "confidence", "confidence_var"]
         clz = "correct"
 
         clf = tree.DecisionTreeClassifier(criterion="gini", max_depth=3)
         clf.fit(train[feats], train[clz])
 
-        preds = clf.predict(test[feats])
+        preds = clf.predict_proba(test[feats])[:,1] > 0.95
 
         f1 = metrics.f1_score(test[clz], preds, average=None)
         p = metrics.precision_score(test[clz], preds, average=None)
         r = metrics.recall_score(test[clz], preds, average=None)
+        fpr, tpr, _ = metrics.roc_curve(test[clz], clf.predict_proba(test[feats])[:, 1], pos_label=0)
+        auc = metrics.auc(fpr, tpr)
 
-        data.append([name, acc, *f1, *p, *r])
+        data.append([name, acc, auc, *f1, *p, *r])
 
-    out = pd.DataFrame(data, columns=["conf", "acc", "f1_w", "f1_c", "p_w", "p_c", "r_w", "r_c"])
+    out = pd.DataFrame(data, columns=["conf", "acc", "auc", "f1_w", "f1_c", "p_w", "p_c", "r_w", "r_c"])
 
     base_qos = out.loc[0, "acc"]
     out["qos_loss"] = base_qos - out["acc"]
@@ -140,7 +148,7 @@ def model_tree():
 
     out = out.sort_values("qos_loss")
 
-    plt.figure(figsize=(5,3))
+    plt.figure(figsize=(5, 3))
     fields = [
         # ("f1_w", "- F1", "-"),
         ("p_w", "- P", "r-"),
@@ -150,15 +158,94 @@ def model_tree():
         ("r_c", "+ R", "g--"),
         ("acc", "Accuracy", "k-"),
         ("acc_inv", "$1 - \\mathrm{Accuracy}$", "k--"),
+        ("auc", "- AUC", "b-"),
     ]
     for f, label, line in sorted(fields, key=lambda x: str(reversed(x))):
         plt.plot(out["qos_loss"], out[f], line, label=label)
-    plt.legend(loc="center left", ncol=3, bbox_to_anchor=(0,0.65), fontsize='small')
+    plt.legend(loc="center left", ncol=4, bbox_to_anchor=(0, 0.65), fontsize='small')
     plt.title("Correctness prediction characteristics\nfor wrong (-) and correct (+) predictions (decision tree)")
     plt.ylabel("Precision, Recall, Accuracy")
     plt.xlabel("QoS Loss")
     plt.tight_layout()
-    plt.savefig("test.pdf")
+    plt.savefig("test-tree.pdf")
+
+
+def model_reg():
+    args = get_args()
+
+    df = load(args.model_log)
+
+    grouped = df.groupby([0])
+
+    data = []
+
+    for name, group in grouped:
+
+        y = group.loc[:, 1].to_numpy(dtype=int)
+        y_pred = group.loc[:, 2].to_numpy(dtype=int)
+        confidence = group.loc[:, 3:].to_numpy(dtype=float)
+
+        features = pd.DataFrame({
+            'y': y,
+            'y_pred': y_pred,
+            'y_pred_0': (y_pred == 0).astype(float),
+            'y_pred_1': (y_pred == 1).astype(float),
+            'y_pred_2': (y_pred == 2).astype(float),
+            'y_pred_3': (y_pred == 3).astype(float),
+            'y_pred_4': (y_pred == 4).astype(float),
+            'y_pred_5': (y_pred == 5).astype(float),
+            'confidence': confidence[np.arange(len(y_pred)), y_pred],
+            'confidence_var': confidence.var(axis=1),
+            'correct': (y == y_pred).astype(int),
+        })
+
+        acc = features["correct"].sum() / len(features["correct"])
+
+        train, test = model_selection.train_test_split(features, test_size=.33, shuffle=True, random_state=123)
+        feats = ["y_pred_0", "y_pred_1", "y_pred_2", "y_pred_3", "y_pred_4", "y_pred_5", "confidence", "confidence_var"]
+        clz = "correct"
+
+        clf = linear_model.LogisticRegression()
+        clf.fit(train[feats], train[clz])
+
+        preds = clf.predict(test[feats])
+
+        f1 = metrics.f1_score(test[clz], preds, average=None)
+        p = metrics.precision_score(test[clz], preds, average=None)
+        r = metrics.recall_score(test[clz], preds, average=None)
+        fpr, tpr, _ = metrics.roc_curve(test[clz], clf.predict_proba(test[feats])[:, 1], pos_label=0)
+        auc = metrics.auc(fpr, tpr)
+
+        data.append([name, acc, auc, *f1, *p, *r])
+
+    out = pd.DataFrame(data, columns=["conf", "acc", "auc", "f1_w", "f1_c", "p_w", "p_c", "r_w", "r_c"])
+
+    base_qos = out.loc[0, "acc"]
+    out["qos_loss"] = base_qos - out["acc"]
+    out["acc_inv"] = 1 - out["acc"]
+
+    out = out.sort_values("qos_loss")
+
+    plt.figure(figsize=(5, 3))
+    fields = [
+        # ("f1_w", "- F1", "-"),
+        ("p_w", "- P", "r-"),
+        ("r_w", "- R", "r--"),
+        # ("f1_c", "+ F1"),
+        ("p_c", "+ P", "g-"),
+        ("r_c", "+ R", "g--"),
+        ("acc", "Accuracy", "k-"),
+        ("acc_inv", "$1 - \\mathrm{Accuracy}$", "k--"),
+        ("auc", "- AUC", "b-"),
+    ]
+    for f, label, line in sorted(fields, key=lambda x: str(reversed(x))):
+        plt.plot(out["qos_loss"], out[f], line, label=label)
+    plt.legend(loc="center left", ncol=4, bbox_to_anchor=(0, 0.65), fontsize='small')
+    plt.title("Correctness prediction characteristics\nfor wrong (-) and correct (+) predictions (decision tree)")
+    plt.ylabel("Precision, Recall, Accuracy")
+    plt.xlabel("QoS Loss")
+    plt.tight_layout()
+    plt.savefig("test-logreg.pdf")
 
 
 def plot():
@@ -195,3 +282,4 @@ def plot():
 if __name__ == '__main__':
     # plot()
     model_tree()
+    # model_reg()
