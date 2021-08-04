@@ -11,6 +11,8 @@ tuner_results/
 conf*.txt
 conf*.pdf
 conf*.png
+*.pdf
+*.txt
 
 __pycache__
 
