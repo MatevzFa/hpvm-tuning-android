@@ -1,4 +1,5 @@
 import os
+import shutil
 import sys
 
 sys.path.append(os.getenv("HPVM_ROOT") + "/hpvm/test/dnn_benchmarks")  # noqa: do not format
@@ -48,6 +49,48 @@ def compile_target_binary(
         target_binary, build_dir)
 
     return exporter, target_binary
+
+
+def install_android_binary(
+    *,
+    model_id: str,
+    model: Module,
+    tuneset: DatasetTy, testset: DatasetTy,
+    output_dir: Path, conf_file: Path,
+    app_root_dir: Path,
+    android_abi: str,
+) -> Tuple[ModelExporter, Path]:
+
+    build_dir = output_dir / "build"
+    target_binary = build_dir / model_id
+
+    exporter = ModelExporter(model, tuneset, testset,
+                             output_dir, config_file=conf_file, target="android",
+                             weights_prefix=f"models/{model_id}")
+
+    exporter.generate(
+        java_package="si.fri.matevzfa.approxhpvmdemo.ApproxHPVMWrapper").compile(target_binary, build_dir)
+
+    app_main = Path(app_root_dir) / "app" / "src" / "main"
+    app_models = app_main / "assets" / "models"
+    app_params = app_models / model_id
+    app_bin = app_main / "cpp" / "bin" / android_abi
+
+    app_bin.mkdir(parents=True, exist_ok=True)
+    app_models.mkdir(parents=True, exist_ok=True)
+
+    os.remove(output_dir / "weights" / "test_input.bin")
+    os.remove(output_dir / "weights" / "tune_input.bin")
+    os.remove(output_dir / "weights" / "test_labels.bin")
+    os.remove(output_dir / "weights" / "tune_labels.bin")
+
+    shutil.copy(build_dir / "hpvm_c.linked.bc", app_bin)
+
+    shutil.rmtree(app_params, ignore_errors=True)
+    shutil.copytree(output_dir / "weights", app_params)
+
+    shutil.copy(os.getenv("GLOBAL_KNOBS_PATH"), app_main / "assets")
+    shutil.copy(conf_file, app_params / "confs.txt")
 
 
 def compile_tuner_binary(
