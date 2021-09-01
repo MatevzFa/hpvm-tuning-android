@@ -12,6 +12,7 @@ class _Args:
     output_dir: str
     app_root: str
     abi: str
+    java_package: str
 
 
 def get_args():
@@ -20,6 +21,7 @@ def get_args():
     parser.add_argument("model_id", type=str)
     parser.add_argument("conf_file", type=str)
     parser.add_argument("-A", "--app-root", type=str, required=True)
+    parser.add_argument("-J", "--java-package", type=str, required=True)
     parser.add_argument("--abi", type=str, required=True)
     parser.add_argument("-o", "--output-dir", type=str, required=True)
 
@@ -42,7 +44,7 @@ def main():
         conf_file=Path(args.conf_file),
         output_dir=Path(args.output_dir),
         app_root_dir=args.app_root, android_abi=args.abi,
-    )
+        java_package=args.java_package)
 
 
 if __name__ == '__main__':

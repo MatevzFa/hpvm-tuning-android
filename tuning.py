@@ -58,6 +58,7 @@ def install_android_binary(
     tuneset: DatasetTy, testset: DatasetTy,
     output_dir: Path, conf_file: Path,
     app_root_dir: Path,
+    java_package,
     android_abi: str,
 ) -> Tuple[ModelExporter, Path]:
 
@@ -69,7 +70,7 @@ def install_android_binary(
                              weights_prefix=f"models/{model_id}")
 
     exporter.generate(
-        java_package="si.fri.matevzfa.approxhpvmdemo.ApproxHPVMWrapper").compile(target_binary, build_dir)
+        java_package=java_package).compile(target_binary, build_dir)
 
     app_main = Path(app_root_dir) / "app" / "src" / "main"
     app_models = app_main / "assets" / "models"
