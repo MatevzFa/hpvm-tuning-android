@@ -10,9 +10,7 @@ from hpvm_profiler_android import read_hpvm_configs
 from matplotlib import rc
 from numpy.core.fromnumeric import mean
 
-from analysis import setup_tex
-
-setup_tex()
+from analysis import lighten_color
 
 
 @dataclass
@@ -61,22 +59,27 @@ def get_data(excel_file, sheet_name, config_file):
     means = np.mean(a, axis=1)
     stds = np.std(a, axis=1)
 
+    print(len(means))
+
     #
     # Prepare x-axis data
     #
     _, confs = read_hpvm_configs(config_file)
+    print(len(confs))
 
     qos_losses = [c.qos_loss for c in confs[:len(means)]]
+    speedups = [c.speedup for c in confs[:len(means)]]
 
-    data = sorted(zip(qos_losses, means, stds))
+    print(len(qos_losses))
 
-    data = data[:-1]
+    data = sorted(zip(qos_losses, means, stds, speedups))
 
     qos_losses = np.array([d[0] for d in data])
     means = np.array([d[1] for d in data])
     stds = np.array([d[2] for d in data])
+    speedups = np.array([d[3] for d in data])
 
-    return qos_losses, means, stds
+    return qos_losses, means, stds, speedups
 
 
 def main():
@@ -87,28 +90,52 @@ def main():
     with open(args.plotting_json) as f:
         nns = json.load(f)
 
-    marker = itertools.cycle(('^', 'o', 's', 'x', '.'))
+    markers = itertools.cycle(('^', 'o', 's', 'x', '.'))
+    colors = itertools.cycle(('blue', 'green', 'orange',  'red'))
 
     plt.figure(figsize=(5, 3))
-    plt.ylim(0.55, 1.15)
+    # plt.ylim(0.65, 1.05)
 
     plt.axhline(1.0, color='gray', linestyle='--', linewidth=.5)
-    plt.axvline(3.0, color='gray', linestyle='--', linewidth=.5)
 
     for nn, config_path in nns.items():
-        plt.ylabel("Energy consumption")
-        plt.xlabel("QoS Loss")
 
-        qos_losses, means, stds = get_data(args.excel_file, nn, config_path)
+        qos_losses, means, stds, speedups = get_data(args.excel_file, nn, config_path)
+        speedups = 1/speedups
+
+        print(qos_losses)
+
+        lw = .75
+
+        m = next(markers)
+        c = next(colors)
+
+        kwargs = dict(
+            color=c,
+            linewidth=lw,
+            marker=m,
+            markersize=2.5,
+        )
 
         plt.errorbar(
             qos_losses, means, stds,
-            label="\\texttt{" + esc(nn) + "}",
-            linewidth=.5, marker=next(marker), markersize=3,
-            elinewidth=.5, capsize=1
+            linestyle='-',
+            elinewidth=lw, capsize=1, ecolor=lighten_color(c, .5),
+            **kwargs,
         )
+        plt.plot(
+            qos_losses, speedups,
+            linestyle='--',
+            **kwargs,
+        )
+        plt.plot([], [],
+                 label="\\texttt{" + esc(nn.replace("_combined", "")) + "}", **kwargs)
+
+    plt.plot([], [], '--', color='gray', label="Time reduction")
 
     plt.legend(loc='best')
+    plt.ylabel("Energy reduction")
+    plt.xlabel("QoS Loss")
     plt.savefig(args.out_fig, bbox_inches='tight')
 
 
