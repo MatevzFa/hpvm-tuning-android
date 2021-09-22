@@ -91,11 +91,12 @@ def main():
         nns = json.load(f)
 
     markers = itertools.cycle(('^', 'o', 's', 'x', '.'))
-    colors = itertools.cycle(('blue', 'green', 'orange',  'red'))
+    colors = itertools.cycle(('tab:blue', 'tab:orange', 'tab:green', 'tab:red'))
 
     plt.figure(figsize=(5, 3))
-    # plt.ylim(0.65, 1.05)
+    plt.ylim(0.55, 1.05)
 
+    plt.axvline(3.0, color='gray', linestyle='--', linewidth=.5)
     plt.axhline(1.0, color='gray', linestyle='--', linewidth=.5)
 
     for nn, config_path in nns.items():
@@ -112,26 +113,26 @@ def main():
 
         kwargs = dict(
             color=c,
-            linewidth=lw,
+            linewidth=0,
             marker=m,
-            markersize=2.5,
+            markersize=3,
         )
 
         plt.errorbar(
             qos_losses, means, stds,
-            linestyle='-',
-            elinewidth=lw, capsize=1, ecolor=lighten_color(c, .5),
+            # linestyle=False,
+            elinewidth=0.8*lw, capsize=1, ecolor=c,
             **kwargs,
         )
-        plt.plot(
-            qos_losses, speedups,
-            linestyle='--',
-            **kwargs,
-        )
+        # plt.plot(
+        #     qos_losses, speedups,
+        #     linestyle='--',
+        #     **kwargs,
+        # )
         plt.plot([], [],
-                 label="\\texttt{" + esc(nn.replace("_combined", "")) + "}", **kwargs)
+                 label=nn.replace("_combined", ""), **kwargs)
 
-    plt.plot([], [], '--', color='gray', label="Time reduction")
+    # plt.plot([], [], '--', color='gray', label="Time reduction")
 
     plt.legend(loc='best')
     plt.ylabel("Energy reduction")
