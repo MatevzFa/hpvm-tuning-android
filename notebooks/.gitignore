@@ -2,3 +2,4 @@ model_log*
 *.csv
 classification-log*
 *.sqlite3
+adaptation_v2.csv
