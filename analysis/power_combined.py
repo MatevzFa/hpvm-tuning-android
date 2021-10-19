@@ -123,19 +123,21 @@ def main():
             # linestyle=False,
             elinewidth=0.8*lw, capsize=1, ecolor=c,
             **kwargs,
+            label="Energy consumption"
         )
         plt.plot(
             qos_losses, speedups,
             linestyle='--',
             **kwargs,
+            label="Inference time"
         )
-        plt.plot([], [],
-                 label=nn.replace("_combined", ""), **kwargs)
+        # plt.plot([], [],
+        #          label=nn.replace("_combined", ""), **kwargs)
 
-    plt.plot([], [], '--', color='gray', label="Time reduction")
+    # plt.plot([], [], '--', color='gray',)
 
     plt.legend(loc='best')
-    plt.ylabel("Energy reduction")
+    plt.ylabel("Inference time / Energy consumption\n(relative to no approx.)")
     plt.xlabel("QoS Loss")
     plt.savefig(args.out_fig, bbox_inches='tight')
 

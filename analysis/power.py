@@ -135,7 +135,7 @@ def main():
     # plt.plot([], [], '--', color='gray', label="Time reduction")
 
     plt.legend(loc='best')
-    plt.ylabel("Energy reduction")
+    plt.ylabel("Energy consumption\n(relative to no approx.)")
     plt.xlabel("QoS Loss")
     plt.savefig(args.out_fig, bbox_inches='tight')
 
