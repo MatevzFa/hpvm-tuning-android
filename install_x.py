@@ -1,8 +1,34 @@
-from tuning import ModelInfo, get_model_info, install_android_binary, load_datasets, prepare_model
-from nn_models import MobileNetUciHar
-from dataclasses import dataclass
+def check_env():  # noqa
+    import os
+
+    def is_set(var):
+        return len(os.getenv(var, "")) > 0
+
+    variables = [
+        "HPVM_ROOT",
+        "ANDROID_HPVM_TENSOR_RT_BUILD_DIR",
+        "GLOBAL_KNOBS_PATH",
+    ]
+
+    unset_variables = [v for v in variables if not is_set(v)]
+
+    if len(unset_variables) > 0:
+        print("The following environment variables are not set:")
+        for v in unset_variables:
+            print(f"  {v}")
+        exit(-1)
+
+
+check_env()  # noqa
+
+
 import argparse
+from dataclasses import dataclass
 from pathlib import Path
+
+from nn_models import MobileNetUciHar
+from tuning import (ModelInfo, get_model_info, install_android_binary,
+                    load_datasets, prepare_model)
 
 
 @dataclass

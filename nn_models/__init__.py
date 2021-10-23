@@ -1,13 +1,13 @@
+import os
 import sys
 
-sys.path.append("/app/hpvm/test/dnn_benchmarks") # noqa
+sys.path.append(os.getenv("HPVM_ROOT") + "/hpvm/test/dnn_benchmarks")  # noqa: do not format
 
 from pytorch.dnn.mobilenet import *
 from pytorch.dnn.mobilenet import _make_seq
-
 from torch.nn import Module
 
-"""
+"""e
 MobileNet
 """
 
@@ -40,6 +40,7 @@ class MobileNetUciHar(Classifier):
 """
 ResNet50
 """
+
 
 class Bottleneck(Module):
     expansion = 4
