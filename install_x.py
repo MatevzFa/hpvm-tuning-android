@@ -1,3 +1,6 @@
+from sys import stderr
+
+
 def check_env():  # noqa
     import os
 
@@ -5,17 +8,19 @@ def check_env():  # noqa
         return len(os.getenv(var, "")) > 0
 
     variables = [
-        "HPVM_ROOT",
-        "ANDROID_HPVM_TENSOR_RT_BUILD_DIR",
-        "GLOBAL_KNOBS_PATH",
+        ("HPVM_ROOT", "Path to the root of the HPVM repository (e.g. path/to/hpvm-release)"),
+        ("ANDROID_HPVM_TENSOR_RT_BUILD_DIR", "Path to the build directory where hpvm-tensor-rt-android is built."),
+        (
+            "GLOBAL_KNOBS_PATH",
+            "Path to global_knobs.txt file. You can find it in the main HPVM repository " +
+            "(e.g. $HPVM_ROOT/hpvm/projects/hpvm-tensor-rt/global_knobs.txt)"
+        ),
     ]
 
-    unset_variables = [v for v in variables if not is_set(v)]
+    unset_variables = [(v, description) for v, description in variables if not is_set(v)]
 
     if len(unset_variables) > 0:
-        print("The following environment variables are not set:")
-        for v in unset_variables:
-            print(f"  {v}")
+        print("Environment has not been setup. Check if sourced your copy of env-example.sh.", file=stderr)
         exit(-1)
 
 
