@@ -23,3 +23,5 @@ __pycache__
 weights*.pdf
 
 *.xls
+
+!profiled-confs/*.txt

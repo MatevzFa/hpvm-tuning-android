@@ -1,0 +1,381 @@
+0.0
++++++
+conf0 1.0 1.0 89.5 0.0 0.939983 0.959752 0.771471
+1 gpu conv fp32 11 add fp32 11 relu fp32 11
+2 gpu conv fp32 11 add fp32 11 relu fp32 11 pool_max fp32 11
+3 gpu conv fp32 11 add fp32 11 relu fp32 11
+4 gpu conv fp32 11 add fp32 11 relu fp32 11 pool_max fp32 11
+5 gpu conv fp32 11 add fp32 11 relu fp32 11
+6 gpu conv fp32 11 add fp32 11 relu fp32 11
+7 gpu conv fp32 11 add fp32 11 relu fp32 11 pool_max fp32 11
+8 gpu conv fp32 11 add fp32 11 relu fp32 11
+9 gpu conv fp32 11 add fp32 11 relu fp32 11
+10 gpu conv fp32 11 add fp32 11 relu fp32 11 pool_max fp32 11
+11 gpu conv fp32 11 add fp32 11 relu fp32 11
+12 gpu conv fp32 11 add fp32 11 relu fp32 11
+13 gpu conv fp32 11 add fp32 11 relu fp32 11 pool_max fp32 11
+14 gpu mul fp32 11 add fp32 11 relu fp32 11
+15 gpu mul fp32 11 add fp32 11
+16 gpu softmax fp32 11
+-----
++++++
+conf1 1.147339756581751 1.0 88.5 1.0 0.920047 0.944166 0.734437
+1 gpu conv fp16 12 add fp16 12 relu fp16 12
+2 gpu conv perf_fp16 167 add fp16 12 relu fp16 12 pool_max fp16 12
+3 gpu conv perf_fp16 164 add fp32 11 relu fp16 12
+4 gpu conv perf_fp16 159 add fp16 12 relu fp16 12 pool_max fp16 12
+5 gpu conv fp16 12 add fp16 12 relu fp16 12
+6 gpu conv fp32 11 add fp16 12 relu fp16 12
+7 gpu conv perf 137 add fp16 12 relu fp16 12 pool_max fp16 12
+8 gpu conv samp_fp16 262 add fp32 11 relu fp16 12
+9 gpu conv perf_fp16 152 add fp16 12 relu fp16 12
+10 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+11 gpu conv perf_fp16 152 add fp32 11 relu fp16 12
+12 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+13 gpu conv perf_fp16 157 add fp16 12 relu fp16 12 pool_max fp32 11
+14 gpu mul fp32 11 add fp16 12 relu fp32 11
+15 gpu mul fp16 12 add fp16 12
+16 gpu softmax fp16 12
+-----
++++++
+conf2 1.1316377578217902 1.0 83.5 6.0 0.803914 0.858908 0.525611
+1 gpu conv perf_fp16 164 add fp32 11 relu fp16 12
+2 gpu conv fp16 12 add fp16 12 relu fp16 12 pool_max fp32 11
+3 gpu conv perf_fp16 162 add fp32 11 relu fp32 11
+4 gpu conv samp_fp16 266 add fp16 12 relu fp16 12 pool_max fp16 12
+5 gpu conv fp16 12 add fp16 12 relu fp32 11
+6 gpu conv samp_fp16 269 add fp16 12 relu fp32 11
+7 gpu conv samp 231 add fp16 12 relu fp32 11 pool_max fp32 11
+8 gpu conv perf 122 add fp16 12 relu fp32 11
+9 gpu conv perf_fp16 156 add fp32 11 relu fp16 12
+10 gpu conv perf 122 add fp16 12 relu fp16 12 pool_max fp32 11
+11 gpu conv perf_fp16 160 add fp16 12 relu fp32 11
+12 gpu conv samp_fp16 264 add fp32 11 relu fp32 11
+13 gpu conv samp_fp16 269 add fp16 12 relu fp16 12 pool_max fp16 12
+14 gpu mul fp32 11 add fp32 11 relu fp32 11
+15 gpu mul fp32 11 add fp16 12
+16 gpu softmax fp32 11
+-----
++++++
+conf3 1.263321126115816 1.0 87.0 2.5 0.929277 0.948593 0.800012
+1 gpu conv fp16 12 add fp16 12 relu fp16 12
+2 gpu conv perf_fp16 151 add fp16 12 relu fp16 12 pool_max fp16 12
+3 gpu conv perf 132 add fp16 12 relu fp16 12
+4 gpu conv perf 134 add fp16 12 relu fp16 12 pool_max fp16 12
+5 gpu conv fp32 11 add fp16 12 relu fp16 12
+6 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+7 gpu conv perf_fp16 167 add fp32 11 relu fp16 12 pool_max fp32 11
+8 gpu conv samp_fp16 262 add fp16 12 relu fp16 12
+9 gpu conv perf_fp16 152 add fp16 12 relu fp32 11
+10 gpu conv perf_fp16 152 add fp32 11 relu fp16 12 pool_max fp32 11
+11 gpu conv samp 237 add fp16 12 relu fp16 12
+12 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+13 gpu conv samp_fp16 262 add fp16 12 relu fp16 12 pool_max fp16 12
+14 gpu mul fp16 12 add fp16 12 relu fp32 11
+15 gpu mul fp16 12 add fp32 11
+16 gpu softmax fp32 11
+-----
++++++
+conf4 1.2501302348757672 1.0 85.0 4.5 0.906447 0.949505 0.66245
+1 gpu conv fp32 11 add fp16 12 relu fp32 11
+2 gpu conv perf_fp16 155 add fp16 12 relu fp32 11 pool_max fp32 11
+3 gpu conv samp_fp16 261 add fp16 12 relu fp32 11
+4 gpu conv samp_fp16 262 add fp16 12 relu fp16 12 pool_max fp32 11
+5 gpu conv fp32 11 add fp16 12 relu fp32 11
+6 gpu conv perf_fp16 154 add fp16 12 relu fp32 11
+7 gpu conv samp_fp16 265 add fp16 12 relu fp32 11 pool_max fp32 11
+8 gpu conv samp_fp16 262 add fp16 12 relu fp16 12
+9 gpu conv perf 121 add fp16 12 relu fp16 12
+10 gpu conv samp 235 add fp16 12 relu fp16 12 pool_max fp32 11
+11 gpu conv samp 232 add fp16 12 relu fp16 12
+12 gpu conv perf_fp16 152 add fp32 11 relu fp32 11
+13 gpu conv perf_fp16 157 add fp32 11 relu fp16 12 pool_max fp32 11
+14 gpu mul fp16 12 add fp16 12 relu fp16 12
+15 gpu mul fp32 11 add fp32 11
+16 gpu softmax fp16 12
+-----
++++++
+conf5 1.3112357014740994 1.0 87.5 2.0 0.909277 0.930802 0.758602
+1 gpu conv fp16 12 add fp16 12 relu fp16 12
+2 gpu conv perf_fp16 155 add fp16 12 relu fp16 12 pool_max fp16 12
+3 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+4 gpu conv perf_fp16 159 add fp16 12 relu fp16 12 pool_max fp16 12
+5 gpu conv fp32 11 add fp16 12 relu fp16 12
+6 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+7 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+8 gpu conv samp_fp16 262 add fp16 12 relu fp16 12
+9 gpu conv perf_fp16 152 add fp16 12 relu fp16 12
+10 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+11 gpu conv perf_fp16 152 add fp16 12 relu fp16 12
+12 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+13 gpu conv samp_fp16 262 add fp16 12 relu fp16 12 pool_max fp16 12
+14 gpu mul fp32 11 add fp16 12 relu fp16 12
+15 gpu mul fp16 12 add fp32 11
+16 gpu softmax fp32 11
+-----
++++++
+conf6 1.2195792916012993 1.0 86.0 3.5 0.899411 0.93148 0.70242
+1 gpu conv fp32 11 add fp16 12 relu fp32 11
+2 gpu conv perf_fp16 152 add fp16 12 relu fp32 11 pool_max fp16 12
+3 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+4 gpu conv perf_fp16 159 add fp16 12 relu fp16 12 pool_max fp16 12
+5 gpu conv fp16 12 add fp16 12 relu fp16 12
+6 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+7 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+8 gpu conv samp_fp16 262 add fp32 11 relu fp16 12
+9 gpu conv perf_fp16 152 add fp32 11 relu fp16 12
+10 gpu conv perf_fp16 152 add fp16 12 relu fp32 11 pool_max fp16 12
+11 gpu conv perf_fp16 152 add fp16 12 relu fp16 12
+12 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+13 gpu conv perf_fp16 157 add fp16 12 relu fp16 12 pool_max fp16 12
+14 gpu mul fp16 12 add fp16 12 relu fp16 12
+15 gpu mul fp16 12 add fp16 12
+16 gpu softmax fp16 12
+-----
++++++
+conf7 1.1558573462891606 1.0 86.0 3.5 0.899406 0.931473 0.702423
+1 gpu conv fp32 11 add fp16 12 relu fp16 12
+2 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+3 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+4 gpu conv perf_fp16 159 add fp16 12 relu fp16 12 pool_max fp32 11
+5 gpu conv fp16 12 add fp16 12 relu fp16 12
+6 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+7 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+8 gpu conv samp_fp16 262 add fp32 11 relu fp16 12
+9 gpu conv perf_fp16 152 add fp16 12 relu fp16 12
+10 gpu conv perf_fp16 152 add fp16 12 relu fp32 11 pool_max fp32 11
+11 gpu conv perf_fp16 152 add fp16 12 relu fp16 12
+12 gpu conv samp_fp16 261 add fp16 12 relu fp32 11
+13 gpu conv perf_fp16 157 add fp32 11 relu fp16 12 pool_max fp16 12
+14 gpu mul fp16 12 add fp16 12 relu fp16 12
+15 gpu mul fp16 12 add fp32 11
+16 gpu softmax fp32 11
+-----
++++++
+conf8 1.3021563215136716 1.0 85.5 4.0 0.905868 0.938611 0.712801
+1 gpu conv fp16 12 add fp16 12 relu fp16 12
+2 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+3 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+4 gpu conv perf_fp16 159 add fp16 12 relu fp16 12 pool_max fp16 12
+5 gpu conv fp16 12 add fp16 12 relu fp16 12
+6 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+7 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+8 gpu conv samp_fp16 262 add fp16 12 relu fp16 12
+9 gpu conv perf_fp16 152 add fp16 12 relu fp16 12
+10 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+11 gpu conv perf_fp16 160 add fp16 12 relu fp16 12
+12 gpu conv samp_fp16 261 add fp32 11 relu fp16 12
+13 gpu conv samp_fp16 262 add fp16 12 relu fp16 12 pool_max fp16 12
+14 gpu mul fp32 11 add fp16 12 relu fp32 11
+15 gpu mul fp16 12 add fp16 12
+16 gpu softmax fp16 12
+-----
++++++
+conf9 1.2482501272120767 1.0 86.0 3.5 0.89904 0.930682 0.704665
+1 gpu conv fp32 11 add fp16 12 relu fp32 11
+2 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+3 gpu conv samp_fp16 261 add fp16 12 relu fp32 11
+4 gpu conv perf_fp16 159 add fp16 12 relu fp16 12 pool_max fp32 11
+5 gpu conv fp16 12 add fp16 12 relu fp32 11
+6 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+7 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+8 gpu conv samp_fp16 262 add fp16 12 relu fp32 11
+9 gpu conv perf_fp16 152 add fp16 12 relu fp16 12
+10 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp32 11
+11 gpu conv perf_fp16 152 add fp16 12 relu fp16 12
+12 gpu conv samp_fp16 261 add fp16 12 relu fp32 11
+13 gpu conv samp_fp16 262 add fp32 11 relu fp16 12 pool_max fp16 12
+14 gpu mul fp16 12 add fp16 12 relu fp16 12
+15 gpu mul fp16 12 add fp16 12
+16 gpu softmax fp32 11
+-----
++++++
+conf10 1.2993667310137011 1.0 82.5 7.0 0.895812 0.936132 0.705733
+1 gpu conv fp16 12 add fp16 12 relu fp32 11
+2 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+3 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+4 gpu conv perf_fp16 159 add fp16 12 relu fp16 12 pool_max fp16 12
+5 gpu conv perf_fp16 161 add fp16 12 relu fp16 12
+6 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+7 gpu conv perf_fp16 152 add fp32 11 relu fp32 11 pool_max fp16 12
+8 gpu conv samp_fp16 262 add fp16 12 relu fp16 12
+9 gpu conv samp_fp16 262 add fp16 12 relu fp32 11
+10 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+11 gpu conv perf_fp16 152 add fp16 12 relu fp16 12
+12 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+13 gpu conv perf_fp16 157 add fp16 12 relu fp16 12 pool_max fp16 12
+14 gpu mul fp16 12 add fp32 11 relu fp16 12
+15 gpu mul fp32 11 add fp32 11
+16 gpu softmax fp16 12
+-----
++++++
+conf11 1.3753239310276089 1.0 84.5 5.0 0.90826 0.941574 0.726642
+1 gpu conv fp32 11 add fp16 12 relu fp32 11
+2 gpu conv perf_fp16 152 add fp32 11 relu fp16 12 pool_max fp16 12
+3 gpu conv samp_fp16 261 add fp16 12 relu fp32 11
+4 gpu conv perf_fp16 159 add fp16 12 relu fp16 12 pool_max fp16 12
+5 gpu conv perf_fp16 166 add fp32 11 relu fp16 12
+6 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+7 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp32 11
+8 gpu conv samp_fp16 262 add fp16 12 relu fp32 11
+9 gpu conv perf_fp16 152 add fp16 12 relu fp16 12
+10 gpu conv samp_fp16 261 add fp16 12 relu fp16 12 pool_max fp32 11
+11 gpu conv perf_fp16 152 add fp16 12 relu fp16 12
+12 gpu conv samp_fp16 261 add fp16 12 relu fp32 11
+13 gpu conv samp_fp16 262 add fp32 11 relu fp16 12 pool_max fp16 12
+14 gpu mul fp16 12 add fp16 12 relu fp16 12
+15 gpu mul fp32 11 add fp16 12
+16 gpu softmax fp32 11
+-----
++++++
+conf12 1.2858657161494735 1.0 85.0 4.5 0.896855 0.924698 0.739079
+1 gpu conv fp32 11 add fp16 12 relu fp32 11
+2 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+3 gpu conv samp_fp16 261 add fp16 12 relu fp32 11
+4 gpu conv perf_fp16 159 add fp32 11 relu fp16 12 pool_max fp16 12
+5 gpu conv perf_fp16 162 add fp16 12 relu fp16 12
+6 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+7 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+8 gpu conv samp_fp16 262 add fp16 12 relu fp16 12
+9 gpu conv perf_fp16 152 add fp16 12 relu fp16 12
+10 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp32 11
+11 gpu conv perf_fp16 152 add fp16 12 relu fp16 12
+12 gpu conv samp_fp16 261 add fp16 12 relu fp32 11
+13 gpu conv samp_fp16 262 add fp32 11 relu fp16 12 pool_max fp16 12
+14 gpu mul fp16 12 add fp16 12 relu fp16 12
+15 gpu mul fp32 11 add fp16 12
+16 gpu softmax fp32 11
+-----
++++++
+conf13 1.3030170683916051 1.0 85.0 4.5 0.896841 0.924622 0.739414
+1 gpu conv fp16 12 add fp32 11 relu fp16 12
+2 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+3 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+4 gpu conv perf_fp16 159 add fp32 11 relu fp16 12 pool_max fp16 12
+5 gpu conv perf_fp16 162 add fp16 12 relu fp16 12
+6 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+7 gpu conv perf_fp16 152 add fp32 11 relu fp16 12 pool_max fp16 12
+8 gpu conv samp_fp16 262 add fp16 12 relu fp32 11
+9 gpu conv perf_fp16 152 add fp32 11 relu fp16 12
+10 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp32 11
+11 gpu conv perf_fp16 152 add fp32 11 relu fp16 12
+12 gpu conv samp_fp16 261 add fp16 12 relu fp32 11
+13 gpu conv samp_fp16 262 add fp16 12 relu fp16 12 pool_max fp16 12
+14 gpu mul fp32 11 add fp16 12 relu fp16 12
+15 gpu mul fp16 12 add fp16 12
+16 gpu softmax fp16 12
+-----
++++++
+conf14 1.2890188934818656 1.0 85.5 4.0 0.9025 0.931137 0.733639
+1 gpu conv fp16 12 add fp16 12 relu fp32 11
+2 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+3 gpu conv samp_fp16 261 add fp32 11 relu fp16 12
+4 gpu conv perf_fp16 159 add fp16 12 relu fp16 12 pool_max fp16 12
+5 gpu conv perf_fp16 163 add fp32 11 relu fp16 12
+6 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+7 gpu conv perf_fp16 152 add fp32 11 relu fp16 12 pool_max fp16 12
+8 gpu conv samp_fp16 262 add fp16 12 relu fp16 12
+9 gpu conv perf_fp16 152 add fp16 12 relu fp16 12
+10 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+11 gpu conv perf_fp16 152 add fp32 11 relu fp16 12
+12 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+13 gpu conv samp_fp16 262 add fp16 12 relu fp16 12 pool_max fp32 11
+14 gpu mul fp32 11 add fp16 12 relu fp16 12
+15 gpu mul fp16 12 add fp16 12
+16 gpu softmax fp16 12
+-----
++++++
+conf15 1.399792039157505 1.0 85.5 4.0 0.908571 0.936445 0.744208
+1 gpu conv fp16 12 add fp32 11 relu fp16 12
+2 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+3 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+4 gpu conv perf_fp16 159 add fp16 12 relu fp16 12 pool_max fp16 12
+5 gpu conv perf_fp16 163 add fp16 12 relu fp16 12
+6 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+7 gpu conv perf_fp16 152 add fp32 11 relu fp16 12 pool_max fp16 12
+8 gpu conv samp_fp16 262 add fp16 12 relu fp16 12
+9 gpu conv perf_fp16 152 add fp16 12 relu fp16 12
+10 gpu conv perf_fp16 152 add fp16 12 relu fp32 11 pool_max fp32 11
+11 gpu conv samp_fp16 262 add fp16 12 relu fp16 12
+12 gpu conv samp_fp16 261 add fp32 11 relu fp16 12
+13 gpu conv samp_fp16 262 add fp16 12 relu fp16 12 pool_max fp16 12
+14 gpu mul fp16 12 add fp16 12 relu fp16 12
+15 gpu mul fp16 12 add fp16 12
+16 gpu softmax fp16 12
+-----
++++++
+conf16 1.3152978183421307 1.0 86.0 3.5 0.899853 0.926017 0.739128
+1 gpu conv fp16 12 add fp16 12 relu fp16 12
+2 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+3 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+4 gpu conv perf_fp16 159 add fp32 11 relu fp16 12 pool_max fp16 12
+5 gpu conv perf_fp16 166 add fp16 12 relu fp16 12
+6 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+7 gpu conv perf_fp16 152 add fp32 11 relu fp16 12 pool_max fp16 12
+8 gpu conv samp_fp16 262 add fp16 12 relu fp16 12
+9 gpu conv perf_fp16 152 add fp16 12 relu fp16 12
+10 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+11 gpu conv perf_fp16 152 add fp16 12 relu fp16 12
+12 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+13 gpu conv samp_fp16 262 add fp16 12 relu fp16 12 pool_max fp16 12
+14 gpu mul fp16 12 add fp16 12 relu fp16 12
+15 gpu mul fp16 12 add fp16 12
+16 gpu softmax fp32 11
+-----
++++++
+conf17 1.355713847098557 1.0 85.5 4.0 0.902533 0.931134 0.733882
+1 gpu conv fp16 12 add fp16 12 relu fp16 12
+2 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+3 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+4 gpu conv perf_fp16 159 add fp16 12 relu fp16 12 pool_max fp16 12
+5 gpu conv perf_fp16 163 add fp32 11 relu fp16 12
+6 gpu conv samp_fp16 261 add fp32 11 relu fp16 12
+7 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+8 gpu conv samp_fp16 262 add fp16 12 relu fp16 12
+9 gpu conv perf_fp16 152 add fp16 12 relu fp16 12
+10 gpu conv perf_fp16 152 add fp32 11 relu fp16 12 pool_max fp16 12
+11 gpu conv perf_fp16 152 add fp16 12 relu fp16 12
+12 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+13 gpu conv samp_fp16 262 add fp32 11 relu fp16 12 pool_max fp16 12
+14 gpu mul fp16 12 add fp16 12 relu fp16 12
+15 gpu mul fp16 12 add fp16 12
+16 gpu softmax fp16 12
+-----
++++++
+conf18 1.2955238944700027 1.0 85.5 4.0 0.902502 0.931114 0.733787
+1 gpu conv fp16 12 add fp16 12 relu fp16 12
+2 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+3 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+4 gpu conv perf_fp16 159 add fp16 12 relu fp16 12 pool_max fp16 12
+5 gpu conv perf_fp16 163 add fp16 12 relu fp32 11
+6 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+7 gpu conv perf_fp16 152 add fp16 12 relu fp32 11 pool_max fp16 12
+8 gpu conv samp_fp16 262 add fp16 12 relu fp16 12
+9 gpu conv perf_fp16 152 add fp16 12 relu fp32 11
+10 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+11 gpu conv perf_fp16 152 add fp16 12 relu fp16 12
+12 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+13 gpu conv samp_fp16 262 add fp16 12 relu fp16 12 pool_max fp16 12
+14 gpu mul fp16 12 add fp16 12 relu fp16 12
+15 gpu mul fp16 12 add fp16 12
+16 gpu softmax fp32 11
+-----
++++++
+conf19 1.3010513165028403 1.0 83.0 6.5 0.897063 0.934263 0.715436
+1 gpu conv fp16 12 add fp16 12 relu fp16 12
+2 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+3 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+4 gpu conv perf_fp16 159 add fp16 12 relu fp32 11 pool_max fp16 12
+5 gpu conv perf_fp16 161 add fp16 12 relu fp16 12
+6 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+7 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+8 gpu conv samp_fp16 262 add fp16 12 relu fp16 12
+9 gpu conv perf_fp16 152 add fp16 12 relu fp16 12
+10 gpu conv perf_fp16 152 add fp16 12 relu fp16 12 pool_max fp16 12
+11 gpu conv perf_fp16 152 add fp16 12 relu fp16 12
+12 gpu conv samp_fp16 261 add fp16 12 relu fp16 12
+13 gpu conv samp_fp16 262 add fp16 12 relu fp16 12 pool_max fp16 12
+14 gpu mul fp16 12 add fp16 12 relu fp16 12
+15 gpu mul fp16 12 add fp16 12
+16 gpu softmax fp32 11
+-----
