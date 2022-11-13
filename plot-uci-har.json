@@ -1,0 +1,4 @@
+{
+    "mobilenet_uci-har": "profiled-confs/conf-mobilenet_uci-har-5000,3.0,10.0-200-cost_linear,.filtered.android-profiled.50confs.txt",
+    "resnet50_uci-har": "profiled-confs/conf-resnet50_uci-har-5000,3.0,5.0-50-cost_linear,.all.android-profiled.50+400+monsoon.txt"
+}
