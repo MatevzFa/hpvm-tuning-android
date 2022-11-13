@@ -2,15 +2,144 @@ import argparse
 import itertools
 import json
 from dataclasses import dataclass
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple, Union
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from hpvm_profiler_android import read_hpvm_configs
 from matplotlib import rc
 from numpy.core.fromnumeric import mean
 
 from analysis import lighten_color
+
+PathLike = Union[Path, str]
+conf_opening, conf_closing = "+++++", "-----"
+
+@dataclass
+class ConfidenceInfo:
+    avg_correct: float
+    avg_wrong: float
+    avg_total: float
+
+
+class Config:
+    def __init__(
+        self,
+        conf_name: str,
+        speedup: float,
+        energy: float,
+        qos: float,
+        qos_loss: float,
+        config_body: List[str],
+        confidence_info: Optional[ConfidenceInfo] = None,
+        perclass_confidence_info: Optional[Dict[int, ConfidenceInfo]] = None,
+    ):
+        self.conf_name = conf_name
+        self.speedup = speedup
+        self.energy = energy
+        self.qos = qos
+        self.qos_loss = qos_loss
+        # We don't care about the information in this part, and we don't parse this.
+        self.config_body = config_body
+        self.confidence_info = confidence_info
+        self.perclass_confidence_info = perclass_confidence_info
+
+    def update_profile_results(self, speedup: float, qos: float, base_qos: float,
+                               confidence_info: Optional[ConfidenceInfo] = None,
+                               perclass_confidence_info: Optional[Dict[int, ConfidenceInfo]] = None):
+        # recorded_base_qos = self.qos + self.qos_loss
+        # if abs(recorded_base_qos - base_qos) > 0.025:
+        #     raise ValueError(
+        #         f"Baseline QoS mismatch. Original: {recorded_base_qos}, measured: {base_qos}"
+        #     )
+        self.speedup = speedup
+        self.qos = qos
+        self.qos_loss = base_qos - qos
+        if confidence_info:
+            self.confidence_info = confidence_info
+        if perclass_confidence_info:
+            self.perclass_confidence_info = perclass_confidence_info
+
+    def __repr__(self) -> str:
+        header_fields = [
+            self.conf_name,
+            self.speedup,
+            self.energy,
+            self.qos,
+            self.qos_loss,
+        ]
+        if self.confidence_info:
+            header_fields.extend([
+                self.confidence_info.avg_total,
+                self.confidence_info.avg_correct,
+                self.confidence_info.avg_wrong,
+            ])
+        if self.perclass_confidence_info:
+            for label in self.perclass_confidence_info:
+                header_fields.extend([
+                    self.perclass_confidence_info[label].avg_total,
+                    self.perclass_confidence_info[label].avg_correct,
+                    self.perclass_confidence_info[label].avg_wrong,
+                ])
+
+        header = " ".join(str(field) for field in header_fields)
+        lines = [conf_opening, header, *self.config_body, conf_closing]
+        return "\n".join(lines)
+
+    __str__ = __repr__
+
+
+def read_hpvm_configs(config_file: PathLike) -> Tuple[str, List[Config]]:
+    # def read_hpvm_configs(config_file, config_num, temp_file):
+    ret_configs = []
+    with open(config_file) as f:
+        text = f.read()
+    # There's 1 float sitting on the first line of config file.
+    # We don't use it, but want to keep that intact.
+    header, *configs = text.split(conf_opening)
+    header = header.strip()
+    for config_text in configs:
+        config_text = config_text.replace(conf_closing, "").strip()
+        config_header, *config_body = config_text.splitlines()
+        conf_name, *number_fields = config_header.split(" ")
+
+        speedup, energy, qos, qos_drop = [float(s) for s in number_fields[:4]]
+
+        confidence_info = None
+        # Overall confidence
+        if len(number_fields) >= 7:
+            cavg_total, cavg_correct, cavg_wrong = [
+                float(s) for s in number_fields[4:7]]
+            confidence_info = ConfidenceInfo(
+                avg_total=cavg_total,
+                avg_correct=cavg_correct,
+                avg_wrong=cavg_wrong,
+            )
+
+        # Per-class confidence
+        perclass_confidence_info = {}
+        if len(number_fields) > 7:
+            the_fields = number_fields[7:]
+            for label, i in enumerate(range(0, len(the_fields), 3)):
+                cavg_total, cavg_correct, cavg_wrong = [
+                    float(s) for s in the_fields[i:i+3]]
+                perclass_confidence_info[label] = ConfidenceInfo(
+                    avg_total=cavg_total,
+                    avg_correct=cavg_correct,
+                    avg_wrong=cavg_wrong,
+                )
+
+        ret_configs.append(
+            Config(
+                conf_name, speedup, energy, qos, qos_drop,
+                config_body,
+                confidence_info=confidence_info,
+                perclass_confidence_info=perclass_confidence_info,
+            )
+        )
+    return header, ret_configs
+
 
 
 @dataclass
