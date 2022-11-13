@@ -1,0 +1,5 @@
+{
+    "mobilenet_cifar10": "../hpvm-tuning-configurations/conf-mobilenet_cifar10-10000,3.0,5.0-50-cost_linear,qos_p1.all.txt",
+    "alexnet2_cifar10": "../hpvm-tuning-configurations/conf-alexnet2_cifar10-10000,3.0,5.0-50-cost_linear,qos_p1.all.txt",
+    "vgg16_cifar10": "../hpvm-tuning-configurations/conf-vgg16_cifar10-10000,3.0,5.0-50-cost_linear,qos_p1.all.txt"
+}
